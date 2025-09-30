@@ -132,7 +132,7 @@ function App() {
             fontWeight: '700',
             textShadow: '2px 2px 4px rgba(0,0,0,0.2)'
           }}>
-            🧮 Calculadora Mágica
+            🧮 Calculadora
           </h1>
           <p style={{ 
             margin: '10px 0 0 0',
@@ -275,7 +275,7 @@ function App() {
                   value={filtroFecha}
                   onChange={(e) => setFiltroFecha(e.target.value)}
                   style={{
-                    ...selectStyle, // USAMOS EL MISMO ESTILO QUE LOS SELECT
+                    ...selectStyle, 
                     fontFamily: 'inherit'
                   }}
                 />

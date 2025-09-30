@@ -5,31 +5,23 @@ from pydantic import BaseModel
 from typing import List, Optional
 from pymongo import MongoClient
 
-# -------------------------------
-# 🚀 Configuración de FastAPI
-# -------------------------------
+
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # en producción mejor ["http://localhost:3000"]
+    allow_origins=["*"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# -------------------------------
-# 🚀 Conexión a MongoDB (Docker)
-# -------------------------------
-# ⚠️ Importante: este nombre ("practicas-mongo-1") solo funciona dentro de la red Docker Compose
 mongo_client = MongoClient("mongodb://admin_user:web3@mongo:27017/")
 database = mongo_client.practica1
 collection_historial = database.historial
 
-# -------------------------------
-# 🚀 Modelos con Pydantic
-# -------------------------------
+
 class Operacion(BaseModel):
-    numeros: List[float]  # lista de números (acepta n números)
+    numeros: List[float]  
 
 class OperacionLote(BaseModel):
     operacion: str
@@ -38,9 +30,7 @@ class OperacionLote(BaseModel):
 class LoteOperaciones(BaseModel):
     operaciones: List[OperacionLote]
 
-# -------------------------------
-# 🚀 Funciones auxiliares
-# -------------------------------
+
 def validar_numeros(numeros: List[float], operacion: str):
     """Valida que no haya números negativos"""
     for n in numeros:
@@ -64,9 +54,7 @@ def guardar_historial(operacion: str, numeros: List[float], resultado: float):
     }
     collection_historial.insert_one(document)
 
-# -------------------------------
-# 🚀 Endpoints de operaciones
-# -------------------------------
+
 @app.post("/calculadora/sum")
 def sumar(data: Operacion):
     validar_numeros(data.numeros, "suma")
@@ -110,9 +98,7 @@ def dividir(data: Operacion):
     guardar_historial("división", data.numeros, result)
     return {"operacion": "división", "numeros": data.numeros, "resultado": result}
 
-# -------------------------------
-# 🚀 Historial con filtros
-# -------------------------------
+
 @app.get("/calculadora/historial")
 def obtener_historial(
     operacion: Optional[str] = Query(None, description="Filtrar por operación (suma, resta, multiplicación, división)"),
@@ -154,46 +140,55 @@ def obtener_historial(
 
     return {"historial": historial}
 
-# -------------------------------
-# 🚀 Endpoint de lote
-# -------------------------------
+
 @app.post("/calculadora/lote")
 def ejecutar_lote(data: LoteOperaciones):
     resultados = []
-
+    
+    # PRIMERA PASADA: Validar TODAS las operaciones antes de ejecutar ninguna
     for op in data.operaciones:
         # Validación de negativos
         validar_numeros(op.numeros, op.operacion)
+        
+        # Validación de división por cero
+        if op.operacion == "división" and 0 in op.numeros[1:]:
+            raise HTTPException(
+                status_code=403,
+                detail={
+                    "error": "No se puede dividir entre cero",
+                    "operacion": op.operacion,
+                    "numeros": op.numeros,
+                },
+            )
+        
+        # Validación de operación soportada
+        if op.operacion not in ["suma", "resta", "multiplicación", "división"]:
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": f"Operación no soportada: {op.operacion}",
+                    "operacion": op.operacion,
+                    "numeros": op.numeros,
+                },
+            )
 
+    # SEGUNDA PASADA: Si todas las validaciones pasaron, ejecutar y guardar
+    for op in data.operaciones:
         # Ejecución de operaciones
         if op.operacion == "suma":
             result = sum(op.numeros)
-
         elif op.operacion == "resta":
             result = op.numeros[0]
             for n in op.numeros[1:]:
                 result -= n
-
         elif op.operacion == "multiplicación":
             result = 1
             for n in op.numeros:
                 result *= n
-
         elif op.operacion == "división":
-            if 0 in op.numeros[1:]:
-                raise HTTPException(
-                    status_code=403,
-                    detail={
-                        "error": "No se puede dividir entre cero",
-                        "operacion": op.operacion,
-                        "numeros": op.numeros,
-                    },
-                )
             result = op.numeros[0]
             for n in op.numeros[1:]:
                 result /= n
-        else:
-            raise HTTPException(status_code=400, detail=f"Operación no soportada: {op.operacion}")
 
         # Guardar en historial
         guardar_historial(op.operacion, op.numeros, result)
@@ -206,5 +201,3 @@ def ejecutar_lote(data: LoteOperaciones):
         })
 
     return {"resultados": resultados}
-
-
