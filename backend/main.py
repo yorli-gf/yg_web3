@@ -133,7 +133,7 @@ def obtener_historial(
     for op in operaciones:
         historial.append({
             "operacion": op.get("operacion", "desconocida"),
-            "numeros": op.get("numeros", []),  # ← Esto evita KeyError
+            "numeros": op.get("numeros", []), 
             "resultado": op.get("resultado", 0),
             "date": op.get("date", datetime.datetime.now()).isoformat(),
         })
@@ -145,7 +145,6 @@ def obtener_historial(
 def ejecutar_lote(data: LoteOperaciones):
     resultados = []
     
-    # PRIMERA PASADA: Validar TODAS las operaciones antes de ejecutar ninguna
     for op in data.operaciones:
         # Validación de negativos
         validar_numeros(op.numeros, op.operacion)
@@ -161,7 +160,6 @@ def ejecutar_lote(data: LoteOperaciones):
                 },
             )
         
-        # Validación de operación soportada
         if op.operacion not in ["suma", "resta", "multiplicación", "división"]:
             raise HTTPException(
                 status_code=400,
@@ -172,7 +170,6 @@ def ejecutar_lote(data: LoteOperaciones):
                 },
             )
 
-    # SEGUNDA PASADA: Si todas las validaciones pasaron, ejecutar y guardar
     for op in data.operaciones:
         # Ejecución de operaciones
         if op.operacion == "suma":

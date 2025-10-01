@@ -15,7 +15,6 @@ function App() {
   const [ordenarPor, setOrdenarPor] = useState("");
   const [orden, setOrden] = useState("desc");
 
-  // Función genérica para llamar al backend
   const operar = async (tipo) => {
     try {
       setLoading(true);
@@ -51,7 +50,6 @@ function App() {
     }
   };
 
-  // Obtener historial desde la API con filtros
   const obtenerHistorial = async () => {
     try {
       // Construir parámetros de consulta
@@ -78,17 +76,14 @@ function App() {
     setOrden("desc");
   };
 
-  // Efecto para cargar historial cuando cambien los filtros
   useEffect(() => {
     obtenerHistorial();
   }, [filtroOperacion, filtroFecha, ordenarPor, orden]);
 
-  // Cargar historial inicial
   useEffect(() => {
     obtenerHistorial();
   }, []);
 
-  // Colores en tonos morados
   const colors = {
     primary: '#8B5FBF',
     primaryDark: '#6B46C1',
@@ -414,7 +409,6 @@ function App() {
   );
 }
 
-// Funciones auxiliares
 const getOperacionIcon = (operacion) => {
   switch(operacion) {
     case 'sum': return '➕';
@@ -462,7 +456,6 @@ const getColorByOperation = (operacion) => {
   }
 };
 
-// Estilos reutilizables
 const btnStyle = {
   padding: '12px 24px',
   border: 'none',
