@@ -1,24 +1,62 @@
+# =========================
 # Python
-_pycache_/
-backend/_pycache_/
-backend/.pytest_cache/
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+.eggs/
+*.log
+
+# Virtual environments
+venv/
+ENV/
+env/
 backend/venv/
 
-# Archivos zip
-*.tar
+# Pytest & coverage
+.pytest_cache/
+.coverage
+htmlcov/
 
+# =========================
+# Backend específico
+# =========================
+backend/__pycache__/
+backend/.pytest_cache/
+
+# =========================
 # Frontend / React
+# =========================
 frontend/node_modules/
 frontend/.pnp/
 frontend/.pnp.js
 frontend/coverage/
 frontend/build/
 
-# Misceláneos
-.DS_Store
+# =========================
+# Archivos comprimidos
+# =========================
+*.tar
+*.gz
+*.zip
+
+# =========================
+# Archivos de entorno
+# =========================
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+
+# =========================
+# Otros / misceláneos
+# =========================
+.DS_Store
 npm-debug.log*
 yarn-debug.log*
+
