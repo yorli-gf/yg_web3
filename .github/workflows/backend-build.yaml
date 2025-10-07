@@ -29,7 +29,7 @@ jobs:
       - name: Determine image tags
         id: vars
         run: |
-          if [[ "${GITHUB_REF_TYPE}" ==  "tag"]]; then
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
             echo "TAG=${GITHUB_REF_NAME}" >> $GITHUB_ENV
           else
             echo "TAG=latest" >> $GITHUB_ENV
