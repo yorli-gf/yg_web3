@@ -1,10 +1,13 @@
-name: Build and Push Docker image
+name: Build and Push Backend Docker image
 
 on: 
   push: 
     branches: ["main"]
     tags:
-      -"v*.*.*"
+      - "v*.*.*"
+    paths:
+      - "backend/**"
+  workflow_dispatch:
 
 jobs:
   build:
@@ -12,12 +15,11 @@ jobs:
 
     permissions: 
       contents: read
-      packages: write #necesaria para subir a GHCR
+      packages: write  # necesaria para subir a GHCR
 
     steps: 
       - name: Checkout code
         uses: actions/checkout@v4
-      
 
       - name: Log in to Github Container Registry
         uses: docker/login-action@v3
@@ -27,7 +29,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Determine image tags
-        id: vars
         run: |
           if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
             echo "TAG=${GITHUB_REF_NAME}" >> $GITHUB_ENV
@@ -37,8 +38,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository }}:${{ env.TAG }} ./backend
+          docker build -t ghcr.io/${{ github.repository }}-backend:${{ env.TAG }} ./backend
 
       - name: Push Docker image
-        run: |
-          docker push ghcr.io/${{ github.repository }}:${{ env.TAG }}
+        run:
