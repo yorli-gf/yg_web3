@@ -44,7 +44,7 @@ function App() {
 
       <button onClick={sumar}>Sumar</button>
 
-      {resultado !== null && <h2>Resultado: {resultado}</h2>}
+      {resultado !== null && <h2 style={{ color: "blue" }}>Resultado: {resultado}</h2>}
 
       <h3>Historial:</h3>
       <ul>
@@ -59,4 +59,3 @@ function App() {
 }
 
 export default App;
-
