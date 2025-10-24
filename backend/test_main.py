@@ -4,7 +4,6 @@ import mongomock
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from pymongo import MongoClient
-from pytest import monkeypatch
 
 from main import app
 fake_mongo_client = mongomock.MongoClient()
