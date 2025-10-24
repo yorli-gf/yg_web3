@@ -42,3 +42,19 @@ jobs:
 
       - name: Push Docker image
         run:
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        working-directory: ./backend
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install pytest
+
+      - name: Run Pytest
+        working-directory: ./backend
+        run: |
+          pytest test_main.py
