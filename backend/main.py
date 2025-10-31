@@ -2,6 +2,7 @@ import datetime
 from fastapi import FastAPI
 from pymongo import MongoClient
 from fastapi.middleware.cors import CORSMiddleware
+from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI()
 app.add_middleware(
@@ -49,3 +50,5 @@ def obtener_historial():
          "date": operacion["date"].isoformat()
          })
       return {"historial": historial}
+
+Instrumentator().instrument(app).expose(app)

@@ -11,7 +11,7 @@ services:
       - mongo-network
 
   calculadora:
-    image: calculadora-fast-api
+    image: ghcr.io/yorli-gf/yg_web3:latest
     volumes:
       - ./backend:/app 
     ports:
