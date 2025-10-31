@@ -5,6 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI()
+collection_historia = None  
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # en producción conviene poner ["http://localhost:3000"]
