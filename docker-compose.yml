@@ -11,7 +11,7 @@ services:
       - mongo-network
 
   calculadora:
-    image: ghcr.io/bearozz/web_iii_practica1-back:latest
+    image: ghcr.io/yorli-gf/yg_web3:latest
     pull_policy: always
     volumes: 
     - ./backend:/app
