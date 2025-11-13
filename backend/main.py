@@ -3,6 +3,38 @@ from fastapi import FastAPI
 from pymongo import MongoClient
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
+import logging
+import os, sys
+from loki_logger_handler.loki_logger_handler import LokiLoggerHandler
+
+# Set up logging
+logger = logging.getLogger("custom_logger")
+logging_data = os.getenv("LOG_LEVEL", "INFO").upper()
+
+if logging_data == "DEBUG":
+    logger.setLevel(logging.DEBUG)
+elif logging_data == "INFO":
+    logger.setLevel(logging.INFO)
+
+# Create a console handler
+console_handler = logging.StreamHandler(sys.stdout)
+console_handler.setLevel(logger.level)
+formatter = logging.Formatter(
+    "%(levelname)s: %(asctime)s - %(name)s - %(message)s"
+)
+console_handler.setFormatter(formatter)
+
+# Create an instance of the custom handler
+custom_handler = LokiLoggerHandler(
+    url="http://loki:3100/loki/api/v1/push",
+    labels={"application": "FastApi"},
+    label_keys={},
+    timeout=10,
+)
+
+logger.addHandler(console_handler)
+logger.addHandler(custom_handler)
+logger.info("Logger initialized")
 
 app = FastAPI()
 
@@ -38,7 +70,8 @@ def sumar(a: float, b: float):
     }
 
     collection_historial.insert_one(document)
-
+    logger.info(f"funciona")
+    logger.debug(f"operacion suma:a={a}, b={b}, resultado={result}")
     return {"a": a, "b": b, "resultado": result}
 
 @app.get("/calculadora/historial")
@@ -52,6 +85,7 @@ def obtener_historial():
             "resultado": operacion["resultado"],
             "date": operacion["date"].isoformat()
         })
+    logger.info(f"funciona otra vez:)")
     return {"historial": historial}
 
 Instrumentator().instrument(app).expose(app)

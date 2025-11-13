@@ -12,6 +12,7 @@ services:
 
   calculadora:
     image: ghcr.io/yorli-gf/yg_web3:latest
+    pull_policy: always
     ports:
       - "8089:8000"
     networks:
@@ -19,6 +20,7 @@ services:
   
   frontend:
     build: ./frontend
+    pull_policy: always
     ports:
     - "3000:3000"
     volumes:
