@@ -88,7 +88,7 @@ def obtener_historial():
             "date": operacion["date"].isoformat()
         })
 
-    logger.info(f"Operación historial exitosa")
+    logger.info(f"historial exitosa")
     logger.debug(f"Historial de operaciones: {historial}")
 
     return {"historial": historial}

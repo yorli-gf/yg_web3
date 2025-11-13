@@ -11,7 +11,7 @@ services:
       - mongo-network
 
   calculadora:
-    image: ghcr.io/yorli-gf/yg_web3:latest
+    image: ghcr.io/yorli-gf/yg_web3/backend:sha-9be5e3e
     pull_policy: always
     ports:
       - "8089:8000"
