@@ -61,3 +61,4 @@ npm-debug.log*
 yarn-debug.log*
 
 monitoring/grafana-data/
+monitoring/loki-data/

@@ -19,7 +19,7 @@ services:
       - mongo-network
   
   frontend:
-    build: ./frontend
+    image: ghcr.io/yorli-gf/yg_web3-frontend:v1.0.0
     pull_policy: always
     ports:
     - "3000:3000"

@@ -52,4 +52,4 @@ services:
 # ------------------------------------
 networks:
   practicas_mongo-network:
-    driver: bridge
+    external: true
