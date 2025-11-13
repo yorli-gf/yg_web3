@@ -13,8 +13,6 @@ services:
   calculadora:
     image: ghcr.io/yorli-gf/yg_web3:latest
     pull_policy: always
-    volumes: 
-    - ./backend:/app
     ports:
       - "8089:8000"
     networks:
