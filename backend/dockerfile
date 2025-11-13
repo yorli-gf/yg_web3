@@ -22,7 +22,8 @@ COPY requirements.txt .
 
 # Install depencencies
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install loki-logger-handler==1.1.2
+RUN pip install --no-cache-dir -r requirements.txt
+
 # Copy the code of the app
 COPY . .
 
