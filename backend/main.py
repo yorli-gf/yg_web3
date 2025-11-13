@@ -85,7 +85,7 @@ def obtener_historial():
             "resultado": operacion["resultado"],
             "date": operacion["date"].isoformat()
         })
-    logger.info(f"funciona otra vez:)")
+    logger.info(f"funciona otra vez por fis:)")
     return {"historial": historial}
 
 Instrumentator().instrument(app).expose(app)
